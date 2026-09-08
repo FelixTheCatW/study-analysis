@@ -1,0 +1,41 @@
+from src.utils.params_finder import ParamsFinder
+
+
+class PFMean(ParamsFinder):
+    def generator_factory(self, params):
+        return lambda x: x.integers(*params).mean()
+
+    def success_condition(self, candidate):
+        return abs(candidate - 621) < 1e-9
+
+    def space_check(self, params):
+        low, high, size = params
+        return low <= 621 <= (high - 1)
+
+class PFMin(ParamsFinder):
+    def generator_factory(self, params):
+        return lambda x: x.integers(*params).min()
+
+    def success_condition(self, candidate):
+        return candidate == 621
+
+    def space_check(self, params):
+        low, high, size = params
+        return low <= 621 <= (high - 1)
+
+if __name__ == "__main__":
+    pf_mean = PFMean().with_parameter_space([range(610, 615), range(630, 631), range(10, 20)])
+    # pf_minn = PFMin().with_parameter_space([range(500, 550), range(1700, 1800), range(10, 20)])
+    
+    
+    result = pf_mean.find_parallel()
+
+    if result:
+        params, seed = result
+
+        print("Найдено!")
+        print(f"Seed: {seed}")
+        print(f"Параметры: {params}")
+
+    else:
+        print("Не найдено.")
