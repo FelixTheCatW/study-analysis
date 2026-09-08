@@ -12,6 +12,23 @@ class PFMean(ParamsFinder):
         low, high, size = params
         return low <= 621 <= (high - 1)
 
+
+class PFStats(ParamsFinder):
+    def generator_factory(self, params):
+        return lambda x: x.integers(*params)
+
+    def success_condition(self, candidate):
+        return (
+            candidate.min() == 621
+            and candidate.max() == 621
+            and candidate.mean() == 621
+        )
+
+    def space_check(self, params):
+        low, high, size = params
+        return low <= 621 <= (high - 1)
+
+
 class PFMin(ParamsFinder):
     def generator_factory(self, params):
         return lambda x: x.integers(*params).min()
@@ -23,12 +40,13 @@ class PFMin(ParamsFinder):
         low, high, size = params
         return low <= 621 <= (high - 1)
 
+
 if __name__ == "__main__":
-    pf_mean = PFMean().with_parameter_space([range(610, 615), range(630, 631), range(10, 20)])
-    # pf_minn = PFMin().with_parameter_space([range(500, 550), range(1700, 1800), range(10, 20)])
-    
-    
-    result = pf_mean.find_parallel()
+    # pf = PFMean().with_parameter_space([range(610, 615), range(630, 631), range(11, 20)])
+    # pf = PFMin().with_parameter_space([range(500, 550), range(1700, 1800), range(10, 20)])
+    pf = PFStats().with_parameter_space([range(518, 550), range(630, 650), range(3, 4)])
+
+    result = pf.find_parallel()
 
     if result:
         params, seed = result
