@@ -57,7 +57,7 @@ class ParamsFinder(ABC):
         search_func = partial(self._try_seed_for_combination)
 
         with Pool() as pool:
-            for result in pool.imap_unordered(search_func, feasible_params):
+            for result in pool.imap_unordered(search_func, feasible_params):                
                 if result is not None:
                     return result
 
